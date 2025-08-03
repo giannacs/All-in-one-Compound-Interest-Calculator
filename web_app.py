@@ -169,7 +169,7 @@ def generate_text_summary(summary):
 def main():
     # Optional: display an intro HTML block at the top
     description = r"""
-    # Compound Interest Calculator Explanation
+    # Compound Interest Calculator 
 
     This calculator estimates the compounded growth of an investment over time, considering monthly contributions, employer matching, fees, and annual lump sum contributions. Relevant information about any combination of input parameters is summarized at the end. For any questions email me at: giannacs@mail.uc.edu 
 
@@ -270,16 +270,11 @@ def main():
 
     ---
 
-    ### Notes:
-
-    - All contributions and growth are assumed to happen monthly.
-    - Fees reduce the effective growth rate.
-    - Employer matching respects annual limits based on salary and match rate.
     """
 
     st.markdown(description)
 
-    st.title("Compound Interest Calculator with Employer Match")
+    st.title("Projected growth with and without fees")
 
     st.sidebar.header("Input Parameters")
 
