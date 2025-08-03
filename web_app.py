@@ -121,22 +121,22 @@ def plot_compound_interest_streamlit(
 
     plt.axvline(x=final_year, color='gray', linestyle='--', alpha=0.7)
 
-    plt.text(final_year - 2.2, balance_with_fees - diff * 0.15, 
+    plt.text(final_year + final_year*0.01, balance_with_fees - balance_with_fees * 0.05, 
              f"{format_currency(balance_with_fees)}", 
              color='tab:blue', fontsize=14, va='center')
 
-    plt.text(final_year - 2.2, balance_without_fees, 
+    plt.text(final_year - final_year*0.11, balance_without_fees + balance_without_fees * 0.01, 
              f"{format_currency(balance_without_fees)}", 
              color='tab:orange', fontsize=14, va='center')
 
     plt.annotate(
         '', 
-        xy=(final_year + 0.5, balance_without_fees), 
-        xytext=(final_year + 0.5, balance_with_fees),
+        xy=(final_year + final_year*0.01, balance_without_fees), 
+        xytext=(final_year + final_year*0.01, balance_with_fees),
         arrowprops=dict(arrowstyle='<->', color='black', lw=2)
     )
     plt.text(
-        final_year + 1.0, mid_y, 
+        final_year + final_year*0.03, mid_y, 
         f"{format_currency(diff)}", 
         fontsize=14, color='red', 
         va='center', ha='left'
