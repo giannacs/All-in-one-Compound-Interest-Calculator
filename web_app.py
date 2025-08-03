@@ -171,7 +171,7 @@ def main():
     description = r"""
     # Compound Interest Calculator Explanation
 
-    This calculator estimates the growth of an investment over time, considering contributions, employer matching, fees, and compound interest.
+    This calculator estimates the compounded growth of an investment over time, considering monthly contributions, employer matching, fees, and annual lump sum contributions. Relevant information about any combination of input parameters is summarized at the end. For any questions email me at: giannacs@mail.uc.edu 
 
     ---
 
