@@ -57,12 +57,14 @@ def compound_interest_with_monthly_net_rate(
 
     total_interest_earned = balance_with_fees - total_employee_contrib - total_employer_contrib
     total_fees_paid = balance_without_fees - balance_with_fees
+    total_fees_paid_pm = total_fees_paid/years/12;
 
     summary = {
         "total_employee_contributions": total_employee_contrib,
         "total_employer_contributions": total_employer_contrib,
         "total_interest_earned": total_interest_earned,
         "total_fees_paid": total_fees_paid,
+        "total_fees_paid_pm": total_fees_paid_pm,
         "final_balance": balance_with_fees,
         "final_balance_without_fees": balance_without_fees
     }
@@ -167,7 +169,12 @@ def generate_text_summary(summary):
     - Total Employer Contributions: ${summary['total_employer_contributions']:,.2f}
     - Total Interest Earned: ${summary['total_interest_earned']:,.2f}
     - Total Fees Paid: ${summary['total_fees_paid']:,.2f}
+    - If you were to take the total fees payed and spread the cost over inverstment period, 
+     you get the monthly cost of the total fees: ${summary['total_fees_paid_pm']:,.2f} per-month 
     """
+
+    
+    ""
 
 def main():
     # Optional: display an intro HTML block at the top
