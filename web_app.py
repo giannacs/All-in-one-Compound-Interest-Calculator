@@ -12,19 +12,16 @@ def compound_interest_with_monthly_net_rate(
     employer_match_cap=0.0,
     annual_lump_sum=0.0
 ):
-    # Monthly derived rates
+    # Correct fee logic: flat monthly deduction from annual AUM fee
     monthly_interest_rate = (1 + annual_interest_rate) ** (1 / 12) - 1
-    monthly_fee_rate = (1 + annual_fee_rate) ** (1 / 12) - 1
-    net_monthly_rate = (1 + monthly_interest_rate) * (1 - monthly_fee_rate) - 1
+    monthly_fee_rate = annual_fee_rate / 12  # Corrected
+    net_monthly_rate = monthly_interest_rate - monthly_fee_rate  # Corrected
 
-    # Employer match cap
     max_employer_annual_match = employer_match_rate * yearly_salary
 
-    # Initialize balances
     balance_with_fees = initial_investment
     balance_without_fees = initial_investment
 
-    # Track results
     balances = []
     total_employer_contrib = 0.0
     total_employee_contrib = 0.0
@@ -33,24 +30,21 @@ def compound_interest_with_monthly_net_rate(
         employer_match_accum = 0.0
 
         for month in range(12):
-            # Employer match calculation
             potential_match = monthly_contribution * employer_match_cap
             remaining_match = max_employer_annual_match - employer_match_accum
             employer_match = min(potential_match, max(remaining_match, 0))
             employer_match_accum += employer_match
 
-            # Total contribution this month
             total_contribution = monthly_contribution + employer_match
 
-            # Apply contributions
+            # Contributions added
             balance_with_fees += total_contribution
             balance_without_fees += total_contribution
 
-            # Apply interest
+            # Monthly growth
             balance_with_fees *= (1 + net_monthly_rate)
             balance_without_fees *= (1 + monthly_interest_rate)
 
-            # Track contributions
             total_employee_contrib += monthly_contribution
             total_employer_contrib += employer_match
 
@@ -61,7 +55,6 @@ def compound_interest_with_monthly_net_rate(
 
         balances.append(balance_with_fees)
 
-    # Final calculations
     total_interest_earned = balance_with_fees - total_employee_contrib - total_employer_contrib
     total_fees_paid = balance_without_fees - balance_with_fees
 
@@ -75,6 +68,7 @@ def compound_interest_with_monthly_net_rate(
     }
 
     return balances, summary
+
 
 
 def format_currency(x):
