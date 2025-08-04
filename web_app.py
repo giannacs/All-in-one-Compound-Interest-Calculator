@@ -12,61 +12,70 @@ def compound_interest_with_monthly_net_rate(
     employer_match_cap=0.0,
     annual_lump_sum=0.0
 ):
-    balance = initial_investment
-
-    monthly_interest_rate = (1 + annual_interest_rate)**(1/12) - 1
-    monthly_fee_rate = (1 + annual_fee_rate)**(1/12) - 1
+    # Monthly derived rates
+    monthly_interest_rate = (1 + annual_interest_rate) ** (1 / 12) - 1
+    monthly_fee_rate = (1 + annual_fee_rate) ** (1 / 12) - 1
     net_monthly_rate = (1 + monthly_interest_rate) * (1 - monthly_fee_rate) - 1
 
+    # Employer match cap
     max_employer_annual_match = employer_match_rate * yearly_salary
 
-    balances = []
+    # Initialize balances
+    balance_with_fees = initial_investment
+    balance_without_fees = initial_investment
 
+    # Track results
+    balances = []
     total_employer_contrib = 0.0
     total_employee_contrib = 0.0
-    total_fees_paid = 0.0
-    total_interest_earned = 0.0
 
     for year in range(years):
         employer_match_accum = 0.0
-        
+
         for month in range(12):
+            # Employer match calculation
             potential_match = monthly_contribution * employer_match_cap
             remaining_match = max_employer_annual_match - employer_match_accum
             employer_match = min(potential_match, max(remaining_match, 0))
-
-            total_contribution = monthly_contribution + employer_match
-            
-            prev_balance = balance
-            balance += total_contribution
-            balance *= (1 + net_monthly_rate)
-            
-            gross_monthly_interest = (1 + monthly_interest_rate) - 1
-            gross_interest_amount = (prev_balance + total_contribution) * gross_monthly_interest
-            net_interest_amount = (balance - (prev_balance + total_contribution))
-            fees_for_month = gross_interest_amount - net_interest_amount
-
-            total_employer_contrib += employer_match
-            total_employee_contrib += monthly_contribution
-            total_fees_paid += fees_for_month
-            total_interest_earned += net_interest_amount
-
             employer_match_accum += employer_match
 
-        balance += annual_lump_sum
+            # Total contribution this month
+            total_contribution = monthly_contribution + employer_match
+
+            # Apply contributions
+            balance_with_fees += total_contribution
+            balance_without_fees += total_contribution
+
+            # Apply interest
+            balance_with_fees *= (1 + net_monthly_rate)
+            balance_without_fees *= (1 + monthly_interest_rate)
+
+            # Track contributions
+            total_employee_contrib += monthly_contribution
+            total_employer_contrib += employer_match
+
+        # Annual lump sum
+        balance_with_fees += annual_lump_sum
+        balance_without_fees += annual_lump_sum
         total_employee_contrib += annual_lump_sum
 
-        balances.append(balance)
+        balances.append(balance_with_fees)
+
+    # Final calculations
+    total_interest_earned = balance_with_fees - total_employee_contrib - total_employer_contrib
+    total_fees_paid = balance_without_fees - balance_with_fees
 
     summary = {
-        "total_employer_contributions": total_employer_contrib,
         "total_employee_contributions": total_employee_contrib,
+        "total_employer_contributions": total_employer_contrib,
         "total_interest_earned": total_interest_earned,
         "total_fees_paid": total_fees_paid,
-        "final_balance": balance
+        "final_balance": balance_with_fees,
+        "final_balance_without_fees": balance_without_fees
     }
 
     return balances, summary
+
 
 def format_currency(x):
     if x >= 1_000_000:
